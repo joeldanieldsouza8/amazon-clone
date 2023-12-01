@@ -3,10 +3,17 @@ import "./Subtotal.css";
 import { NumericFormat } from "react-number-format"; // Import NumericFormat
 import { useStateValue } from "./StateProvider";
 import { getBasketTotal } from "../reducer";
+import { useNavigate } from "react-router-dom";
 
 function Subtotal() {
+  const navigate = useNavigate();
+
   const [state, dispatch] = useStateValue();
   const { basket } = state;
+
+  function handleCheckout() {
+    navigate("/payment");
+  }
 
   return (
     <div className="subtotal">
@@ -30,7 +37,7 @@ function Subtotal() {
         )}
       />
 
-      <button>Proceed to Checkout</button>
+      <button onClick={handleCheckout}>Proceed to Checkout</button>
     </div>
   );
 }
