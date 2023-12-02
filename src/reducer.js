@@ -12,7 +12,7 @@ export default function reducer(state, action) {
   const { basket } = state;
   const { type, item, id, user } = action;
 
-  console.log(action); // debug
+  // console.log(action); // debug
 
   switch (type) {
     case "ADD_TO_BASKET":
@@ -42,6 +42,12 @@ export default function reducer(state, action) {
       return {
         ...state,
         user: user, // set the user to the currently logged in user
+      };
+
+    case "EMPTY_BASKET":
+      return {
+        ...state,
+        basket: [], // empty the basket
       };
 
     default:

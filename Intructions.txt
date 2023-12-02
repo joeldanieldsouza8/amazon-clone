@@ -1,0 +1,4 @@
+1. The backend cloud functionality is taken care of  by firebase
+2. We used the npm commands (check terminal history) to configure the firebase setup
+3. Going forward as we have configured firebase setup if we are installing anny node_modules it should be done in the functions folder
+4. When we deploy the app make sure that you are in the functions folder

@@ -3,11 +3,26 @@ import CheckoutProduct from "./CheckoutProduct";
 import Subtotal from "./Subtotal";
 
 import { useStateValue } from "./StateProvider";
-import FlipMove from "react-flip-move";
+import { useTransition, animated } from "react-spring";
 
 function Checkout() {
   const [state, dispatch] = useStateValue();
   const { basket, user } = state;
+
+  // We need to use useTransition to animate the items in the basket
+  const transitions = useTransition(basket, {
+    from: { transform: "translate3d(0, -20px, 0)", opacity: 0 },
+    enter: (item, index) => async (next) => {
+      await next({
+        opacity: 1,
+        transform: "translate3d(0, 0px, 0)",
+        delay: index * 50,
+      });
+    },
+    leave: { transform: "translate3d(0, -20px, 0)", opacity: 0 },
+    keys: (item) => item.id,
+    config: { tension: 170, friction: 14 },
+  });
 
   return (
     <div className="checkout">
@@ -24,9 +39,9 @@ function Checkout() {
 
           <h2 className="checkout__title">Your shopping Basket</h2>
 
-          {/* We need to use FlipMove to animate the items in the basket */}
-          <FlipMove>
-            {basket?.map((item) => (
+          {/* We need to use transitions.map to animate the items in the basket */}
+          {transitions((style, item) => (
+            <animated.div style={style}>
               <CheckoutProduct
                 key={item.id}
                 id={item.id}
@@ -35,8 +50,8 @@ function Checkout() {
                 price={item.price}
                 rating={item.rating}
               />
-            ))}
-          </FlipMove>
+            </animated.div>
+          ))}
         </div>
       </div>
 

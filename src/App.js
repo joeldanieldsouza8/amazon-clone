@@ -3,12 +3,21 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import Checkout from "./components/Checkout";
 import Login from "./components/Login";
+import Payment from "./components/Payment";
+import NotFound from "./components/NotFound";
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { auth } from "./firebase";
 import { useStateValue } from "./components/StateProvider";
-import Payment from "./components/Payment";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import Orders from "./components/Orders";
+
+// Load Stripe
+const promise = loadStripe(
+  "pk_test_51OIW1rF74TkSTgumCS9rzmrG61T9BLEfz7BPcQZacwChKmL8fpXT7B4jHiLDV3TYNyyyySLqXUeEdJHTInqPYvQ500ixHnfUiH"
+);
 
 function App() {
   const [{}, dispatch] = useStateValue();
@@ -39,7 +48,8 @@ function App() {
       <div className="app">
         <Routes>
           <Route
-            path="/"
+            // path="/"
+            index
             element={
               <>
                 <Header />
@@ -65,12 +75,25 @@ function App() {
             element={
               <>
                 <Header />
-                <Payment />
+                {/* Wrap the Payment component in the Elements component */}
+                <Elements stripe={promise}>
+                  <Payment />
+                </Elements>
               </>
             }
           />
 
-          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route
+            path="/orders"
+            element={
+              <>
+                <Header />
+                <Orders />
+              </>
+            }
+          />
+
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </Router>
